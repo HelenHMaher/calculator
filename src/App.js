@@ -5,40 +5,47 @@ import { Display } from "./Display";
 
 function App() {
   const [currentVal, setCurrentVal] = useState("0");
-  const [prevVal, setPrevVal] = useState("0");
   const [currentsign, setCurrentSign] = useState("positive");
-  const [lastClicked, setLastClicked] = useState("");
+  const [lastOperator, setLastOperator] = useState("");
   const [total, setTotal] = useState("");
+  const [lastClicked, setLastClicked] = useState("");
+  const [error, setError] = useState(false);
 
   const isOperator = /[x/+-]/;
 
   const handleClear = (e) => {
     setCurrentVal("0");
-    setPrevVal("0");
     setCurrentSign("positive");
-    setLastClicked("");
+    setLastOperator("");
     setTotal("");
+    setLastClicked("");
   };
   const handleNumbers = (e) => {
     const value = e.target.value;
     setCurrentVal(
-      currentVal === "0" || isOperator.test(currentVal)
+      currentVal === "0" || isOperator.test(currentVal) || lastClicked === "="
         ? value
         : currentVal + value
     );
+    setLastClicked(value);
   };
   const handleEvaluate = (e) => {
-    total !== ""
+    isOperator.test(currentVal)
       ? setCurrentVal(total)
-      : !isOperator.test(currentVal)
-      ? setCurrentVal(currentVal)
-      : setCurrentVal("0");
+      : setCurrentVal(total + lastOperator + currentVal);
     setTotal("");
+    setLastClicked("=");
   };
-  const handleDecimal = (e) => {};
+  const handleDecimal = (e) => {
+    const value = e.target.value;
+    /./.text(currentVal) ? setError(true) : setCurrentVal(currentVal + value);
+  };
   const handleOperators = (e) => {
     const value = e.target.value;
-
+    !isOperator.test(currentVal) &&
+      setTotal(total !== "" ? total + lastOperator + currentVal : currentVal);
+    setLastOperator(value);
+    setLastClicked(value);
     setCurrentVal(value);
   };
 
