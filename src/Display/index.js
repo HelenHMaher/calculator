@@ -1,5 +1,9 @@
 import React from "react";
 
 export const Display = (props) => {
-  return <div id="display">Display</div>;
+  return (
+    <div className="display" id="display">
+      {props.currentValue}
+    </div>
+  );
 };
