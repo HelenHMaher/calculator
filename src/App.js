@@ -7,8 +7,6 @@ import parseString from "./parseString";
 
 function App() {
   const [currentVal, setCurrentVal] = useState("0");
-  const [currentsign, setCurrentSign] = useState("positive");
-  const [total, setTotal] = useState("0");
   const [evaluated, setEvaluated] = useState(false);
   const [formula, setFormula] = useState("0");
   const [message, setMessage] = useState("");
@@ -16,27 +14,32 @@ function App() {
   const isOperator = /[x/+-]/;
   const endsWithOperator = /[x/+-/]$/;
 
-  const flashError = (text) => {
-    setMessage(text);
+  const flashError = () => {
+    setMessage("ERROR");
+    setTimeout(() => setMessage(""), 1000);
   };
 
   const handleClear = (e) => {
     setCurrentVal("0");
-    setCurrentSign("positive");
-    setTotal("0");
     setEvaluated(false);
     setFormula("0");
   };
   const handleNumbers = (e) => {
     const value = e.target.value;
-    setFormula(formula === "0" || evaluated ? value : formula + value);
+    if (currentVal.length === 12) {
+      flashError();
+    } else {
+      setFormula(formula === "0" || evaluated ? value : formula + value);
+      setCurrentVal(
+        currentVal === "0" || isOperator.test(currentVal) || evaluated
+          ? value
+          : currentVal + value
+      );
+    }
     setEvaluated(false);
-    currentVal === "0" || isOperator.test(currentVal) || evaluated
-      ? setCurrentVal(value)
-      : setCurrentVal(currentVal + value);
   };
   const handleEvaluate = (e) => {
-    if (isOperator.test(currentVal)) {
+    if (isOperator.test(currentVal) || /[.]$/.test(currentVal)) {
       setCurrentVal(parseString(formula.slice(0, formula.length - 1)));
       setFormula(formula.slice(0, formula.length - 1));
     } else {
@@ -51,8 +54,7 @@ function App() {
       setFormula("0" + value);
       setEvaluated(false);
     } else if (/[.]/.test(currentVal) === true) {
-      flashError("Error");
-      setTimeout(() => flashError(""), 1000);
+      flashError();
     } else {
       setCurrentVal(currentVal + value);
       setFormula(formula + value);
@@ -63,7 +65,7 @@ function App() {
     if (evaluated === true) {
       setFormula(currentVal + value);
     } else if (/[.]$/.test(formula) === true) {
-      setFormula(formula + "0" + value);
+      setFormula(formula.replace(/[.]$/, value));
     } else if (endsWithOperator.test(formula) === false) {
       setFormula(formula + value);
     } else if (/[-]/.test(value) === true && /[-]$/.test(formula) === false) {

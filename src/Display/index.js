@@ -4,7 +4,7 @@ export const Display = (props) => {
   return (
     <div className="display-block" id="displayBlock">
       <div className="formula" id="formula">
-        Formula: {props.formula}
+        {props.formula}
       </div>
       <div clasName="display" id="display">
         {props.currentValue}
