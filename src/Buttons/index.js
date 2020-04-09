@@ -4,12 +4,12 @@ import PropTypes from "prop-types";
 export const Buttons = (props) => {
   const { clear, operators, numbers, decimal, evaluate } = props;
   return (
-    <div>
+    <div className="button-container">
       <button id="clear" onClick={clear} value="AC">
         AC
       </button>
       <button id="divide" onClick={operators} value="/">
-        /
+        &divide;
       </button>
       <button id="multiply" onClick={operators} value="x">
         x

@@ -1,3 +1,26 @@
 .App {
   text-align: center;
 }
+.button-container {
+  display: grid;
+  margin: auto;
+  width: 60vw;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+button {
+  background: green;
+}
+
+#clear {
+  grid-column: 1/3;
+}
+
+#zero {
+  grid-column: 1/3;
+}
+
+#equals {
+  grid-column: 4/5;
+  grid-row: 4/6;
+}
