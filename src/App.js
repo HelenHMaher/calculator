@@ -46,7 +46,11 @@ function App() {
   };
   const handleDecimal = (e) => {
     const value = e.target.value;
-    if (/[.]/.test(currentVal) === true || evaluated === true) {
+    if (evaluated === true) {
+      setCurrentVal("0" + value);
+      setFormula("0" + value);
+      setEvaluated(false);
+    } else if (/[.]/.test(currentVal) === true) {
       flashError("Error");
       setTimeout(() => flashError(""), 1000);
     } else {
@@ -56,9 +60,19 @@ function App() {
   };
   const handleOperators = (e) => {
     const value = e.target.value;
-    !endsWithOperator.test(formula) || /[-]/.test(value)
-      ? setFormula(formula + value)
-      : setFormula(formula.slice(0, formula.length - 1) + value);
+    if (evaluated === true) {
+      setFormula(currentVal + value);
+    } else if (/[.]$/.test(formula) === true) {
+      setFormula(formula + "0" + value);
+    } else if (endsWithOperator.test(formula) === false) {
+      setFormula(formula + value);
+    } else if (/[-]/.test(value) === true && /[-]$/.test(formula) === false) {
+      setFormula(formula + value);
+    } else if (/[-]/.test(value) === true && /[-]$/.test(formula) === true) {
+      setFormula(formula.replace(/[x/+-]$/, value));
+    } else {
+      setFormula(formula.replace(/[x/+-]+$/, value));
+    }
     setCurrentVal(value);
     setEvaluated(false);
   };
