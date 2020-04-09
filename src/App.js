@@ -36,9 +36,12 @@ function App() {
       : setCurrentVal(currentVal + value);
   };
   const handleEvaluate = (e) => {
-    isOperator.test(currentVal) &&
+    if (isOperator.test(currentVal)) {
+      setCurrentVal(parseString(formula.slice(0, formula.length - 1)));
       setFormula(formula.slice(0, formula.length - 1));
-    setCurrentVal(parseString(formula));
+    } else {
+      setCurrentVal(parseString(formula));
+    }
     setEvaluated(true);
   };
   const handleDecimal = (e) => {
@@ -53,7 +56,7 @@ function App() {
   };
   const handleOperators = (e) => {
     const value = e.target.value;
-    !endsWithOperator.test(formula) || !isOperator.test(currentVal)
+    !endsWithOperator.test(formula) || /[-]/.test(value)
       ? setFormula(formula + value)
       : setFormula(formula.slice(0, formula.length - 1) + value);
     setCurrentVal(value);
