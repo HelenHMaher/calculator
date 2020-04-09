@@ -2,50 +2,54 @@ import React, { useState } from "react";
 import "./App.css";
 import Buttons from "./Buttons";
 import Display from "./Display";
+import Error from "./Error";
+import parseString from "./parseString";
 
 function App() {
   const [currentVal, setCurrentVal] = useState("0");
   const [currentsign, setCurrentSign] = useState("positive");
-  const [lastOperator, setLastOperator] = useState("");
-  const [total, setTotal] = useState("");
+  const [total, setTotal] = useState("0");
   const [evaluated, setEvaluated] = useState(false);
-  const [error, setError] = useState(false);
-  const [formula, setFormula] = useState("");
+  const [formula, setFormula] = useState("0");
+  const [message, setMessage] = useState("");
 
   const isOperator = /[x/+-]/;
   const endsWithOperator = /[x/+-/]$/;
 
-  const flashError = (error) => {
-    error = true;
-    setTimeout((error = !error), 3000);
+  const flashError = (text) => {
+    setMessage(text);
   };
 
   const handleClear = (e) => {
     setCurrentVal("0");
     setCurrentSign("positive");
-    setTotal("");
-    setEvaluated("");
-    setFormula("");
+    setTotal("0");
+    setEvaluated(false);
+    setFormula("0");
   };
   const handleNumbers = (e) => {
     const value = e.target.value;
-    setFormula(formula + value);
+    setFormula(formula === "0" || evaluated ? value : formula + value);
     setEvaluated(false);
     currentVal === "0" || isOperator.test(currentVal) || evaluated
       ? setCurrentVal(value)
       : setCurrentVal(currentVal + value);
   };
   const handleEvaluate = (e) => {
-    isOperator.test(currentVal)
-      ? setCurrentVal(formula)
-      : setCurrentVal(formula + currentVal);
+    isOperator.test(currentVal) &&
+      setFormula(formula.slice(0, formula.length - 1));
+    setCurrentVal(parseString(formula));
     setEvaluated(true);
   };
   const handleDecimal = (e) => {
     const value = e.target.value;
-    /./.test(currentVal)
-      ? flashError
-      : setCurrentVal(currentVal + value) && setFormula(formula + value);
+    if (/[.]/.test(currentVal) === true || evaluated === true) {
+      flashError("Error");
+      setTimeout(() => flashError(""), 1000);
+    } else {
+      setCurrentVal(currentVal + value);
+      setFormula(formula + value);
+    }
   };
   const handleOperators = (e) => {
     const value = e.target.value;
@@ -53,9 +57,8 @@ function App() {
       ? setFormula(formula + value)
       : setFormula(formula.slice(0, formula.length - 1) + value);
     setCurrentVal(value);
+    setEvaluated(false);
   };
-
-  const Error = (props) => {};
 
   return (
     <div className="App">
@@ -63,7 +66,7 @@ function App() {
         <p>Calculator</p>
       </header>
       <div className="calculator">
-        <Error id="error" className="error" flasherror={flashError} />
+        <Error id="error" className="error" message={message} />
         <Display currentValue={currentVal} formula={formula} />
         <Buttons
           clear={handleClear}
