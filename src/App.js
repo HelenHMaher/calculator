@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./App.css";
 import Buttons from "./Buttons";
 import Display from "./Display";
-import Error from "./Error";
 import parseString from "./parseString";
 
 function App() {
@@ -16,7 +15,7 @@ function App() {
 
   const flashError = () => {
     setMessage("ERROR");
-    setTimeout(() => setMessage(""), 1000);
+    setTimeout(() => setMessage(""), 1500);
   };
 
   const handleClear = (e) => {
@@ -82,11 +81,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Calculator</p>
+        <p>JavaScript Calculator</p>
       </header>
       <div className="calculator">
-        <Error id="error" className="error" message={message} />
-        <Display currentValue={currentVal} formula={formula} />
+        <Display
+          currentValue={currentVal}
+          formula={formula}
+          message={message}
+        />
         <Buttons
           clear={handleClear}
           numbers={handleNumbers}

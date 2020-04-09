@@ -6,10 +6,13 @@ export const Display = (props) => {
     props.currentValue === "/" ? "\u00F7" : props.currentValue;
   return (
     <div className="display-block" id="displayBlock">
+      <div className="error" id="error">
+        {props.message}
+      </div>
       <div className="formula" id="formula">
         {displayFormula}
       </div>
-      <div clasName="display" id="display">
+      <div className="display" id="display">
         {displayCurVal()}
       </div>
     </div>

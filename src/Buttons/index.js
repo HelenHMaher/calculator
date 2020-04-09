@@ -8,10 +8,10 @@ export const Buttons = (props) => {
       <button id="clear" onClick={clear} value="AC">
         AC
       </button>
-      <button id="divide" onClick={operators} value="/">
+      <button id="divide" className="operator" onClick={operators} value="/">
         &divide;
       </button>
-      <button id="multiply" onClick={operators} value="x">
+      <button id="multiply" className="operator" onClick={operators} value="x">
         x
       </button>
       <button id="seven" onClick={numbers} value="7">
@@ -23,7 +23,7 @@ export const Buttons = (props) => {
       <button id="nine" onClick={numbers} value="9">
         9
       </button>
-      <button id="subtract" onClick={operators} value="-">
+      <button id="subtract" className="operator" onClick={operators} value="-">
         -
       </button>
       <button id="four" onClick={numbers} value="4">
@@ -35,7 +35,7 @@ export const Buttons = (props) => {
       <button id="six" onClick={numbers} value="6">
         6
       </button>
-      <button id="add" onClick={operators} value="+">
+      <button id="add" className="operator" onClick={operators} value="+">
         +
       </button>
       <button id="one" onClick={numbers} value="1">
